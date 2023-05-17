@@ -10,9 +10,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const userRoutes = require("./routes/user");
-const productRoute = require("./routes/product");
 
 app.use("/user", userRoutes);
-app.use("/product", productRoute);
 
 app.listen(process.env.PORT, () => console.log("server listening"));

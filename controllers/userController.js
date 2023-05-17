@@ -2,25 +2,26 @@ const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const addUser = async (req, res) => {
-  const { userName, password } = req.body;
-  const hashPassword = await bcrypt.hash(password, Number(process.env.SALT));
+  const { userName, userEmail, password } = req.body;
   try {
+    const hashPassword = await bcrypt.hash(password, Number(process.env.SALT));
     const user = new userModel({
       userName,
+      userEmail,
       password: hashPassword,
     });
     await user.save();
     res.status(200).send({ msg: "Signup successfull" });
   } catch (err) {
-    res.status(500).send({ errMsg: "Data adding failed" });
+    res.status(401).send({ errMsg: "Data adding failed" });
   }
 };
 
 const signin = async (req, res) => {
-  const { userName, password } = req.body;
+  const { userEmail, password } = req.body;
   let user = "";
   try {
-    user = await userModel.findOne({ userName });
+    user = await userModel.findOne({ userEmail });
   } catch (err) {
     res.status(500).send({ errMsg: "Internal server error" });
     return;
